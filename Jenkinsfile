@@ -12,10 +12,7 @@ pipeline{
                 echo "Run integration tests using Selenium"
 
 
-                mail 
-                subject: 'Test Status - ${BUILD_STATUS}', 
-                body: 'Test stage completed.\n\nLogs attached.', 
-                to: 'lswitlearning@gmail.com'
+                mail bcc: '', body: 'Test stage completed.\n\nLogs attached.', subject: 'Test Status - ${BUILD_STATUS}', to: 'lswitlearning@gmail.com'
             }
 
             }
