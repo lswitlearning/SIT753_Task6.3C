@@ -1,24 +1,28 @@
 pipeline {
     agent any
-    
-    stages {
-        stage('Download') {
-            steps {
-                sh 'echo "artifact file" > generatedFile.txt'
-            }
-        }
-    }
-    post {
-        always {
-            archiveArtifacts artifacts: 'generatedFile.txt', onlyIfSuccessful: true
-            
-            echo 'I will always say Hello again!'
-                
-            emailext attachLog: true, attachmentsPattern: 'generatedFile.txt',
-                body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
-                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
-                to: 'lswitlearning@gmail.com'
 
+    stages {
+        stage("Echo Environment Variable") {
+            steps {
+                sh "echo 'Hello World'"
+            }
+            post {
+                success { 
+                    emailext subject: "Build ${env.BUILD_NUMBER} Successful",
+                        body: "Congratulations! Your build succeeded.",
+                        to: "your.email@example.com"
+                }
+                unstable { 
+                    emailext subject: "Build ${env.BUILD_NUMBER} Unstable",
+                        body: "Your build is unstable.",
+                        to: "your.email@example.com"
+                }
+                failure { 
+                    emailext subject: "Build ${env.BUILD_NUMBER} Failed",
+                        body: "Unfortunately, your build failed.",
+                        to: "your.email@example.com"
+                }
+            }
         }
     }
 }
