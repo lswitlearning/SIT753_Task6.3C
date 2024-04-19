@@ -18,7 +18,7 @@ pipeline {
                         emailext (
                             subject: "Unit and Integration Tests - Success",
                             body: "Unit and Integration Tests stage completed successfully.",
-                            to: "your_email@example.com",
+                            to: "lswitlearning@example.com",
                             attachLog: true,
                             attachmentsPattern: "**/*.pdf" // Attach PDF log files
                         )
@@ -29,7 +29,7 @@ pipeline {
                         emailext (
                             subject: "Unit and Integration Tests - Failure",
                             body: "Unit and Integration Tests stage failed. Please check the logs for details.",
-                            to: "your_email@example.com",
+                            to: "lswitlearning@example.com",
                             attachLog: true,
                             attachmentsPattern: "**/*.pdf" // Attach PDF log files
                         )
