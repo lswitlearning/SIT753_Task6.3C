@@ -1,6 +1,7 @@
-pipeline{
-  agent any
-  stages {
+pipeline {
+    agent any
+    
+    stages {
         stage('Build') {
             steps {
                 echo "Build the code using Maven"
@@ -10,41 +11,36 @@ pipeline{
             steps {
                 echo "Run unit tests using JUnit"
                 echo "Run integration tests using Selenium"
-
-
-                mail bcc: '', body: 'Test stage completed.\n\nLogs attached.', subject: 'Test Status123 - ${BUILD_STATUS}', to: 'lswitlearning@gmail.com'
             }
-
+            post {
+                success {
+                    script {
+                        emailext (
+                            subject: "Unit and Integration Tests - Success",
+                            body: "Unit and Integration Tests stage completed successfully.",
+                            to: "your_email@example.com",
+                            attachLog: true,
+                            attachmentsPattern: "**/*.pdf" // Attach PDF log files
+                        )
+                    }
+                }
+                failure {
+                    script {
+                        emailext (
+                            subject: "Unit and Integration Tests - Failure",
+                            body: "Unit and Integration Tests stage failed. Please check the logs for details.",
+                            to: "your_email@example.com",
+                            attachLog: true,
+                            attachmentsPattern: "**/*.pdf" // Attach PDF log files
+                        )
+                    }
+                }
             }
-        
-        
- 
-        
+        }
         stage('Code Analysis') {
             steps {
                 echo "Integrate a code analysis tool to analyse the code using SonarQube"
             }
         }
-        stage('Security Scan') {
-            steps {
-                echo "Perform a security scan on the code using OWASP Dependency-Check"
-                }
-            }
-            
-        stage('Deploy to Staging') {
-            steps {
-                echo "deploy the application to Azure Virtual Machines"
-            }
-        }
-        stage('Integration Tests on Staging') {
-            steps {
-                echo "Run integration tests on the staging environment"
-            }
-        }
-        stage('Deploy to Production') {
-            steps {
-                echo "deploy the application to a production server Azure Virtual Machines"
-        }
     }
-}
 }
