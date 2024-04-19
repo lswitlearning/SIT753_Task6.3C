@@ -10,7 +10,7 @@ pipeline {
                 success {
                     emailext subject: "Test Stage Successful",
                         body: "The test stage completed successfully.",
-                        to: "your.email@example.com",
+                        to: "lswitlearning@gmail.com",
                         attachLog: true
                 }
                 failure {
@@ -30,7 +30,7 @@ pipeline {
                 success {
                     emailext subject: "Security Scan Successful",
                         body: "The security scan completed successfully.",
-                        to: "your.email@example.com",
+                        to: "lswitlearning@gmail.com",
                         attachLog: true
                 }
                 failure {
