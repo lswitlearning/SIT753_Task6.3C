@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage("Test") {
             steps {
-                // Your test steps here
+                echo "Build the code using Maven1"
             }
             post {
                 success {
@@ -24,7 +24,7 @@ pipeline {
 
         stage("Security Scan") {
             steps {
-                // Your security scan steps here
+               echo "Build the code using Maven2"
             }
             post {
                 success {
