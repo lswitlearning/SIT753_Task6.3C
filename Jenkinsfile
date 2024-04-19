@@ -10,15 +10,29 @@ pipeline{
             steps {
                 echo "Run unit tests using JUnit"
                 echo "Run integration tests using Selenium"
+            }
 
-
-                mail bcc: '', body: 'Test stage completed.\n\nLogs attached.', subject: 'Test Status123 - ' $BUILD_STATUS, to: 'lswitlearning@gmail.com'
+            post{
+                success{
+                    emailext(
+                      subject: 'Unit and Integration Tests',
+                      to: 'lswitlearning@gmail.com',
+                      body: 'Unit and Integration Tests successfuly completed', 
+                      attachLog: true
+                    )   
+                }
+                failure{
+                    emailext(
+                      subject: 'Unit and Integration Tests',
+                      to: 'lswitlearning@gmail.com',
+                      body: 'Unit and Integration Tests Failed. Check logs.', 
+                      attachLog: true
+                    )   
+                }
             }
 
         }
-        
-        
- 
+
         
         stage('Code Analysis') {
             steps {
