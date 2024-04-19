@@ -14,16 +14,16 @@ pipeline {
             }
             post {
         success {
-            emailext(
-                subject: "Test Status - ${currentBuild.result}",
-                body: "Test stage completed successfully.",
-                to: "lswitlearning@gmail.com",
-                attachmentsPattern: '**/*.pdf'
-            )
+            emailext
+            body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+            recipientProviders: [[$class: 'DevelopersRecipientProvider'], 
+            [$class: 'RequesterRecipientProvider']],
+            subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
+            
         }
         failure {
             emailext(
-                subject: "Test Status - ${currentBuild.result}",
+                subject: "Test Status - ${BUILD_STATUS}",
                 body: "Test stage failed.\n\nLogs attached.",
                 to: "lswitlearning@gmail.com",
                 attachmentsPattern: '**/*.pdf'
