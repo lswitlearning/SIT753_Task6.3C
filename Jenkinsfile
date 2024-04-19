@@ -15,7 +15,7 @@ pipeline {
             post {
         success {
             emailext(
-                subject: "Test Status - ${BUILD_STATUS}",
+                subject: "Test Status - ${currentBuild.result}",
                 body: "Test stage completed successfully.",
                 to: "lswitlearning@gmail.com",
                 attachmentsPattern: '**/*.pdf'
@@ -23,7 +23,7 @@ pipeline {
         }
         failure {
             emailext(
-                subject: "Test Status - ${BUILD_STATUS}",
+                subject: "Test Status - ${currentBuild.result}",
                 body: "Test stage failed.\n\nLogs attached.",
                 to: "lswitlearning@gmail.com",
                 attachmentsPattern: '**/*.pdf'
