@@ -2,39 +2,23 @@ pipeline {
     agent any
     
     stages {
-        stage('Build') {
+        stage('Download') {
             steps {
-                echo "Build the code using Maven"
+                sh 'echo "artifact file" > generatedFile.txt'
             }
-        }
-        stage('Unit and Integration Tests') {
-            steps {
-                echo "Run unit tests using JUnit"
-                echo "Run integration tests using Selenium"
-            }
-            post {
-        success {
-            emailext
-            body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
-            recipientProviders: [[$class: 'DevelopersRecipientProvider'] 
-            [$class: 'RequesterRecipientProvider']]
-            subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
-            
-        }
-        failure {
-            emailext(
-                subject: "Test Status - ${BUILD_STATUS}",
-                body: "Test stage failed.\n\nLogs attached.",
-                to: "lswitlearning@gmail.com",
-                attachmentsPattern: '**/*.pdf'
-            )
         }
     }
-        }
-        stage('Code Analysis') {
-            steps {
-                echo "Integrate a code analysis tool to analyse the code using SonarQube"
-            }
+    post {
+        always {
+            archiveArtifacts artifacts: 'generatedFile.txt', onlyIfSuccessful: true
+            
+            echo 'I will always say Hello again!'
+                
+            emailext attachLog: true, attachmentsPattern: 'generatedFile.txt',
+                body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                recipientProviders: [developers(), requestor()],
+                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
+            
         }
     }
 }
