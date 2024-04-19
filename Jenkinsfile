@@ -13,29 +13,23 @@ pipeline {
                 echo "Run integration tests using Selenium"
             }
             post {
-                success {
-                    script {
-                        emailext (
-                            subject: "Unit and Integration Tests - Success",
-                            body: "Unit and Integration Tests stage completed successfully.",
-                            to: "lswitlearning@example.com",
-                            attachLog: true,
-                            attachmentsPattern: "**/*.pdf" // Attach PDF log files
-                        )
-                    }
-                }
-                failure {
-                    script {
-                        emailext (
-                            subject: "Unit and Integration Tests - Failure",
-                            body: "Unit and Integration Tests stage failed. Please check the logs for details.",
-                            to: "lswitlearning@example.com",
-                            attachLog: true,
-                            attachmentsPattern: "**/*.pdf" // Attach PDF log files
-                        )
-                    }
-                }
-            }
+        success {
+            emailext(
+                subject: "Test Status - ${BUILD_STATUS}",
+                body: "Test stage completed successfully.",
+                to: "lswitlearning@gmail.com",
+                attachmentsPattern: '**/*.pdf'
+            )
+        }
+        failure {
+            emailext(
+                subject: "Test Status - ${BUILD_STATUS}",
+                body: "Test stage failed.\n\nLogs attached.",
+                to: "lswitlearning@gmail.com",
+                attachmentsPattern: '**/*.pdf'
+            )
+        }
+    }
         }
         stage('Code Analysis') {
             steps {
