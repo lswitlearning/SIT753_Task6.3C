@@ -43,6 +43,25 @@ pipeline{
             steps {
                 echo "Perform a security scan on the code using OWASP Dependency-Check"
                 }
+
+            post{
+                success{
+                    emailext(
+                      subject: 'Security Scan',
+                      to: 'lswitlearning@gmail.com',
+                      body: 'Security Scan Tests successfuly completed', 
+                      attachLog: true
+                    )   
+                }
+                failure{
+                    emailext(
+                      subject: 'Security Scan',
+                      to: 'lswitlearning@gmail.com',
+                      body: 'Security Scan Tests successfuly completed', 
+                      attachLog: true
+                    )   
+                }
+            }
             }
             
         stage('Deploy to Staging') {
