@@ -12,19 +12,24 @@ pipeline{
                 echo "Run integration tests using Selenium"
             }
 
-post {
-        always {
-            archiveArtifacts artifacts: 'generatedFile.txt', onlyIfSuccessful: true
-            
-            echo 'I will always say Hello again!'
-                
-            emailext attachLog: true, attachmentsPattern: 'generatedFile.txt',
-                body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
-                recipientProviders: [developers(), requestor()],
-                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
-            
-        }
-    }
+            post{
+                success{
+                    emailext(
+                      subject: 'Unit and Integration Tests',
+                      to: 'lswitlearning@gmail.com',
+                      body: 'Unit and Integration Tests successfuly completed', 
+                      attachLog: true
+                    )   
+                }
+                failure{
+                    emailext(
+                      subject: 'Unit and Integration Tests',
+                      to: 'lswitlearning@gmail.com',
+                      body: 'Unit and Integration Tests Failed. Check logs.', 
+                      attachLog: true
+                    )   
+                }
+            }
 
         }
 
